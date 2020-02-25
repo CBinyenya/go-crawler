@@ -29,6 +29,19 @@ func wordCounter(s string) map[string]int {
 	return dict
 }
 
+func sorter(dict map[string]int) (map[int][]string, []int) {
+	words := map[int][]string{}
+	var sorted []int
+	for word, frequency := range dict {
+		words[frequency] = append(words[frequency], word)
+	}
+	for k := range words {
+		sorted = append(sorted, k)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(sorted)))
+	return words, sorted
+}
+
 func main() {
 	endpoint := "https://jsonplaceholder.typicode.com/comments"
 
@@ -55,21 +68,13 @@ func main() {
 	}
 	for _, comment := range comments {
 		count := wordCounter(comment.Body)
+		words, sorted := sorter(count)
 
-		words := map[int][]string{}
-		var sorted []int
-		for k, v := range count {
-			words[v] = append(words[v], k)
-		}
-		for k := range words {
-			sorted = append(sorted, k)
-		}
-		sort.Sort(sort.Reverse(sort.IntSlice(sorted)))
 		fmt.Printf("Comment Id: %d Name: %s\n", comment.ID, comment.Name)
-		for _, k := range sorted {
+		for _, frequency := range sorted {
 			var max = 1
-			for _, s := range words[k] {
-				fmt.Printf("\t %s, %d\n", s, k)
+			for _, s := range words[frequency] {
+				fmt.Printf("\t %s, %d\n", s, frequency)
 				max++
 				if max == 4 {
 					fmt.Print("\n")
