@@ -65,9 +65,9 @@ func main() {
 			sorted = append(sorted, k)
 		}
 		sort.Sort(sort.Reverse(sort.IntSlice(sorted)))
+		fmt.Printf("Comment Id: %d Name: %s\n", comment.ID, comment.Name)
 		for _, k := range sorted {
 			var max = 1
-			fmt.Printf("Comment Id: %d Name: %s\n", comment.ID, comment.Name)
 			for _, s := range words[k] {
 				fmt.Printf("\t %s, %d\n", s, k)
 				max++
